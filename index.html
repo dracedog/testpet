@@ -75,7 +75,6 @@
     font-size: 22px;
     margin-bottom: 10px;
   }
-
   #score {
     font-size: 20px;
     margin-bottom: 15px;
@@ -146,6 +145,7 @@
     border-radius: 10px;
     margin: 0 auto;
     animation: happyAnim 3s infinite alternate;
+    position: relative;
   }
   .dog-head {
     width: 15px;
@@ -175,6 +175,7 @@
     border-radius: 15px;
     margin: 0 auto;
     animation: happyAnim 4s infinite alternate;
+    position: relative;
   }
   .cat-head {
     width: 18px;
@@ -235,20 +236,24 @@
 </div>
 
 <script>
+  // Переменные
   let selectedPet = '';
   let petName = 'Питомец';
   let score = 50;
 
+  // Элементы DOM
   const starterDiv = document.getElementById('starter');
   const petDiv = document.getElementById('petPage');
   const petNameDiv = document.getElementById('petName');
   const scoreSpan = document.getElementById('score-value');
   const dinoContainer = document.getElementById('dino-container');
 
+  // Выбор питомца
   function selectPet(pet) {
     selectedPet = pet;
   }
 
+  // Запуск игры
   function startGame() {
     const nameInput = document.getElementById('nameInput').value.trim();
     if (nameInput) {
@@ -259,7 +264,7 @@
       return;
     }
 
-    // Показываем игру
+    // Переключение видимости
     starterDiv.style.display = 'none';
     petDiv.style.display = 'block';
 
@@ -271,10 +276,12 @@
     renderPet();
   }
 
+  // Обновление счета
   function updateScore() {
     scoreSpan.innerText = score;
   }
 
+  // Отрисовка питомца
   function renderPet() {
     dinoContainer.innerHTML = '';
 
@@ -309,65 +316,37 @@
   // Взаимодействия
   function feed() {
     score += 5;
+    if (score > 100) score = 100; // Ограничение по максимуму
     updateScore();
     animateLoad();
   }
 
   function play() {
     score += 10;
+    if (score > 100) score = 100;
     updateScore();
-    animateJump();
   }
 
   function pet() {
     score += 3;
+    if (score > 100) score = 100;
     updateScore();
-    makeHappy();
-    setTimeout(() => makeNeutral(), 3000);
   }
 
   function makeSad() {
-    makeSadEmotion();
-    setTimeout(() => makeNeutral(), 3000);
-  }
-
-  // Анимации
-  function animateJump() {
-    const petEl = document.getElementById('petAnim');
-    if(petEl) {
-      petEl.style.transition = 'transform 0.5s';
-      petEl.style.transform = 'translateY(-20px)';
-      setTimeout(() => {
-        if(petEl) petEl.style.transform = '';
-      }, 500);
-    }
+    score -= 10;
+    if (score < 0) score = 0;
+    updateScore();
   }
 
   function animateLoad() {
-    // Простая анимация
-    const el = document.getElementById('petAnim');
-    if(el) {
-      el.style.transition = 'transform 0.3s';
-      el.style.transform = 'scale(1.1)';
-      setTimeout(() => {
-        if(el) el.style.transform = '';
-      }, 300);
-    }
+    // Простая анимация, например, мигание цвета
+    // Можно вставить сложную анимацию, если хотите
+    dinoContainer.style.backgroundColor = '#ffe'; // пример
+    setTimeout(() => {
+      dinoContainer.style.backgroundColor = '';
+    }, 200);
   }
-
-  // Реакции эмоций
-  function makeHappy() {
-    const el = document.getElementById('petAnim');
-    if(el) {
-      el.style.border = '2px solid yellow';
-      setTimeout(() => {
-        if(el) el.style.border = '';
-      }, 500);
-    }
-  }
-
-  function makeSadEmotion() {
-    const el = document.getElementById('petAnim');
-    if(el) {
-      el.style.border = '2px solid blue';
-      set
+</script>
+</body>
+</html>
