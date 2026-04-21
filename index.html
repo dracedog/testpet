@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Выбор питомца</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0; padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  /* Стартовая страница */
+  #starter {
+    max-width: 400px;
+    width: 100%;
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    text-align: center;
+  }
+
+  #starter h2 {
+    margin-bottom: 15px;
+  }
+
+  .pet-options {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 15px;
+  }
+
+  .pet-option {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #c8e6c9;
+    transition: background-color 0.3s, transform 0.3s;
+  }
+  .pet-option:hover {
+    background-color: #a5d6a7;
+    transform: scale(1.05);
+  }
+
+  #nameInput {
+    width: 80%;
+    padding: 8px;
+    margin-bottom: 15px;
+  }
+
+  button {
+    padding: 10px 20px;
+    font-size: 16px;
+  }
+
+  /* Основная страница */
+  #petPage {
+    display: none;
+    max-width: 400px;
+    width: 100%;
+    background: #ffffffcc;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    margin-top: 20px;
+    text-align: center;
+  }
+
+  #petName {
+    font-size: 22px;
+    margin-bottom: 10px;
+  }
+
+  #score {
+    font-size: 20px;
+    margin-bottom: 15px;
+    font-weight: bold;
+  }
+
+  /* Контейнеры для питомцев */
+  #dino-container {
+    width: 150px;
+    height: 150px;
+    margin: 0 auto 20px;
+    position: relative;
+  }
+
+  /* Анимации */
+  @keyframes blink {
+    0%, 90%, 100% { transform: scaleY(1); }
+    95% { transform: scaleY(0.2); }
+  }
+  @keyframes happyAnim {
+    0% { transform: translateY(0); }
+    50% { transform: translateY(-4px); }
+    100% { transform: translateY(0); }
+  }
+
+  /* Общие стили для животных */
+  .body, .pet-head {
+    position: relative;
+    display: inline-block;
+  }
+
+  /* Динозаврик */
+  .dino-body {
+    width: 50px;
+    height: 60px;
+    background-color: #4CAF50;
+    border-radius: 8px;
+    margin: 0 auto;
+    animation: happyAnim 2s infinite alternate;
+  }
+
+  .dino-head {
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    border-radius: 50%;
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .eye {
+    width: 4px;
+    height: 4px;
+    background: black;
+    border-radius: 50%;
+    animation: blink 4s infinite;
+  }
+
+  /* Щенок */
+  .dog-body {
+    width: 60px;
+    height: 50px;
+    background-color: #ffe082;
+    border-radius: 10px;
+    margin: 0 auto;
+    animation: happyAnim 3s infinite alternate;
+  }
+  .dog-head {
+    width: 15px;
+    height: 15px;
+    background: #ffe082;
+    border-radius: 50%;
+    position: absolute;
+    top: -7px;
+    right: -7px;
+  }
+  .dog-eye {
+    width: 3px;
+    height: 3px;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    animation: blink 4s infinite;
+  }
+
+  /* Котенок */
+  .cat-body {
+    width: 55px;
+    height: 55px;
+    background-color: #ffcc80;
+    border-radius: 15px;
+    margin: 0 auto;
+    animation: happyAnim 4s infinite alternate;
+  }
+  .cat-head {
+    width: 18px;
+    height: 18px;
+    background: #ffcc80;
+    border-radius: 50%;
+    position: absolute;
+    top: -9px;
+    right: -9px;
+  }
+  .cat-eye {
+    width: 3px;
+    height: 3px;
+    background: black;
+    border-radius: 50%;
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    animation: blink 4s infinite;
+  }
+
+  /* Кнопки */
+  button {
+    margin: 5px;
+    padding: 10px 15px;
+    font-size: 16px;
+  }
+</style>
+</head>
+<body>
+
+<!-- Стартовая страница -->
+<div id="starter">
+  <h2>Выберите питомца</h2>
+  <div class="pet-options">
+    <div class="pet-option" onclick="selectPet('dino')">Динозаврик</div>
+    <div class="pet-option" onclick="selectPet('dog')">Щенок</div>
+    <div class="pet-option" onclick="selectPet('cat')">Котенок</div>
+  </div>
+  <input type="text" id="nameInput" placeholder="Введите имя питомца" />
+  <button onclick="startGame()">Начать</button>
+</div>
+
+<!-- Основная страница с питомцем -->
+<div id="petPage">
+  <div id="petName"></div>
+  <div id="score">Баллы: <span id="score-value">50</span></div>
+  
+  <!-- Контейнер для питомца -->
+  <div id="dino-container"></div>
+  <!-- Взаимодействия -->
+  <div>
+    <button onclick="feed()">Кормить (+5)</button>
+    <button onclick="play()">Играть (+10)</button>
+    <button onclick="pet()">Погладить (+3)</button>
+    <button onclick="makeSad()">Злить</button>
+  </div>
+</div>
+
+<script>
+  let selectedPet = '';
+  let petName = 'Питомец';
+  let score = 50;
+
+  const starterDiv = document.getElementById('starter');
+  const petDiv = document.getElementById('petPage');
+  const petNameDiv = document.getElementById('petName');
+  const scoreSpan = document.getElementById('score-value');
+  const dinoContainer = document.getElementById('dino-container');
+
+  function selectPet(pet) {
+    selectedPet = pet;
+  }
+
+  function startGame() {
+    const nameInput = document.getElementById('nameInput').value.trim();
+    if (nameInput) {
+      petName = nameInput;
+    }
+    if (!selectedPet) {
+      alert('Пожалуйста, выберите питомца!');
+      return;
+    }
+
+    // Показываем игру
+    starterDiv.style.display = 'none';
+    petDiv.style.display = 'block';
+
+    // Инициализация данных
+    petNameDiv.innerText = `${petName} - ваш питомец`;
+    score = 50;
+    updateScore();
+
+    renderPet();
+  }
+
+  function updateScore() {
+    scoreSpan.innerText = score;
+  }
+
+  function renderPet() {
+    dinoContainer.innerHTML = '';
+
+    let petEl = document.createElement('div');
+
+    if (selectedPet === 'dino') {
+      petEl.innerHTML = `
+        <div class="dino-body"></div>
+        <div class="dino-head">
+          <div class="eye"></div>
+        </div>
+      `;
+    } else if (selectedPet === 'dog') {
+      petEl.innerHTML = `
+        <div class="dog-body"></div>
+        <div class="dog-head">
+          <div class="dog-eye"></div>
+        </div>
+      `;
+    } else if (selectedPet === 'cat') {
+      petEl.innerHTML = `
+        <div class="cat-body"></div>
+        <div class="cat-head">
+          <div class="cat-eye"></div>
+        </div>
+      `;
+    }
+
+    dinoContainer.appendChild(petEl);
+  }
+
+  // Взаимодействия
+  function feed() {
+    score += 5;
+    updateScore();
+    animateLoad();
+  }
+
+  function play() {
+    score += 10;
+    updateScore();
+    animateJump();
+  }
+
+  function pet() {
+    score += 3;
+    updateScore();
+    makeHappy();
+    setTimeout(() => makeNeutral(), 3000);
+  }
+
+  function makeSad() {
+    makeSadEmotion();
+    setTimeout(() => makeNeutral(), 3000);
+  }
+
+  // Анимации
+  function animateJump() {
+    const petEl = document.getElementById('petAnim');
+    if(petEl) {
+      petEl.style.transition = 'transform 0.5s';
+      petEl.style.transform = 'translateY(-20px)';
+      setTimeout(() => {
+        if(petEl) petEl.style.transform = '';
+      }, 500);
+    }
+  }
+
+  function animateLoad() {
+    // Простая анимация
+    const el = document.getElementById('petAnim');
+    if(el) {
+      el.style.transition = 'transform 0.3s';
+      el.style.transform = 'scale(1.1)';
+      setTimeout(() => {
+        if(el) el.style.transform = '';
+      }, 300);
+    }
+  }
+
+  // Реакции эмоций
+  function makeHappy() {
+    const el = document.getElementById('petAnim');
+    if(el) {
+      el.style.border = '2px solid yellow';
+      setTimeout(() => {
+        if(el) el.style.border = '';
+      }, 500);
+    }
+  }
+
+  function makeSadEmotion() {
+    const el = document.getElementById('petAnim');
+    if(el) {
+      el.style.border = '2px solid blue';
+      set
